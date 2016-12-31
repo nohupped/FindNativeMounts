@@ -29,7 +29,11 @@ func main() {
 	fileNamesChan := make(chan string, 10)
 	wg.Add(1)
 	go func() {
-		if err := FindNativeMounts.Find("/", fileNamesChan, wg); err != nil { // Can provide optional magic numbers
+		if err := FindNativeMounts.Find("/", fileNamesChan, wg); err != nil { 
+		// Can provide optional magic numbers, withoug which the function self-assigns ext4's magic number. 
+		// Eg:
+		//if err := FindNativeMounts.Find("/", fileNamesChan, wg, FindNativeMounts.NFS_SUPER_MAGIC, FindNativeMounts.PROC_SUPER_MAGIC); err != nil { 
+		//This will show only the NFS mounts and the proc mounts.
 			panic(err)
 		}
 	}()
