@@ -8,15 +8,15 @@ import (
 
 func TestFindNativeMounts(t *testing.T) {
 	wg := new(sync.WaitGroup)
-	fileInfoChan := make(chan string, 10)
+	fileNamesChan := make(chan string, 10)
 	wg.Add(1)
 	go func() {
-		if err := FindNativeMounts("/", fileInfoChan, wg); err != nil { // Can provide optional magic numbers
+		if err := FindNativeMounts("/", fileNamesChan, wg); err != nil { // Can provide optional magic numbers
 			panic(err)
 		}
 	}()
 	for ; ; {
-		info, ok := <- fileInfoChan
+		info, ok := <-fileNamesChan
 		if ok == true {
 			fmt.Println(info, "is native")
 		} else {
