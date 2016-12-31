@@ -1,10 +1,10 @@
 ### FindNativeMounts
 
 FindNativeMounts traverse the present working directory and finds if the directories
-found are native to the filesystem or not, based on the filesystem magic number defined in constants.go taken
-from /usr/include/linux/magic.h. This will not traverse recursively.
+found are native to the filesystem or not, based on the filesystem magic number defined in `constants.go` taken
+from `/usr/include/linux/magic.h`. This will not traverse recursively.
 The function takes a directory path as a string, a string channel, a pointer to
-sync.waitgroup and an optional Magic number constant(s) defined in constants.go.
+sync.waitgroup and optional Magic number constant(s) defined in constants.go.
 If magic number is not specified, it assigns `EXT4_SUPER_MAGIC` by default that equals to 0xEF53.
 If unsure of the magic number, use tune2fs to find it. This function don't handle
 errors by itself, but returns it if occurs.
