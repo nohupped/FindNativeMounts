@@ -9,7 +9,7 @@ import (
 
 
 
-// FindNativeMounts traverse the present working directory and finds if the directories
+// Find traverse the present working directory and finds if the directories
 // found are native to the filesystem or not, based on the filesystem magic number defined in constants.go taken
 // from /usr/include/linux/magic.h. This will not traverse recursively.
 // The function takes a directory path as a string, a string channel, a pointer to
@@ -17,7 +17,7 @@ import (
 // If magic number is not specified, it assigns EXT4_SUPER_MAGIC by default that equals to 0xEF53.
 // If unsure of the magic number, use tune2fs to find it. This function don't handle
 // errors by itself, but returns it if occurs.
-func FindNativeMounts(dir string, fileInfoChan chan string, wg *sync.WaitGroup, nativePartitions ...int64) error{
+func Find(dir string, fileInfoChan chan string, wg *sync.WaitGroup, nativePartitions ...int64) error{
 	if len(nativePartitions) <= 0 {
 		nativePartitions = []int64{EXT4_SUPER_MAGIC}
 	}

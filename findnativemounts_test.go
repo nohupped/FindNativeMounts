@@ -1,9 +1,10 @@
-package FindNativeMounts
+package FindNativeMounts_test
 
 import (
 	"testing"
 	"fmt"
 	"sync"
+	"FindNativeMounts"
 )
 
 func TestFindNativeMounts(t *testing.T) {
@@ -11,7 +12,7 @@ func TestFindNativeMounts(t *testing.T) {
 	fileNamesChan := make(chan string, 10)
 	wg.Add(1)
 	go func() {
-		if err := FindNativeMounts("/", fileNamesChan, wg); err != nil { // Can provide optional magic numbers
+		if err := FindNativeMounts.Find("/", fileNamesChan, wg); err != nil { // Can provide optional magic numbers
 			panic(err)
 		}
 	}()
