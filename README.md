@@ -5,8 +5,8 @@ found are native to the filesystem or not, based on the filesystem magic number 
 from `/usr/include/linux/magic.h`. This will not traverse recursively.
 The function takes a directory path as a string, a string channel, a pointer to
 sync.waitgroup and optional Magic number constant(s) defined in constants.go.
-If magic number is not specified, it assigns `EXT4_SUPER_MAGIC` by default that equals to 0xEF53.
-If unsure of the magic number, use tune2fs to find it. This function don't handle
+If magic number is not specified, it assigns `EXT4_SUPER_MAGIC` by default that equals to `0xEF53`.
+If unsure of the magic number, use `tune2fs` to find it. This function don't handle
 errors by itself, but returns it if occurs.
 
 #### Install:
