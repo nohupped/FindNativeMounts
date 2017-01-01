@@ -79,7 +79,7 @@ func main() {
 Finished
 ```
 
-#### Original mounts:
+#### Original mounts as per `df`:
 
 ```
 devdesk# df -h
@@ -96,4 +96,66 @@ tmpfs           3.4G     0  3.4G   0% /sys/fs/cgroup
 /dev/sda5       275G  182G   80G  70% /home
 tmpfs           695M   28K  695M   1% /run/user/1000
 localhost:/tmp   51G  8.9G   39G  19% /mnt
+```
+
+#### To find remote/non-disk based mounts:
+
+```
+package main
+import (
+	"fmt"
+	"sync"
+	"github.com/nohupped/FindNativeMounts"
+)
+func main() {
+	wg := new(sync.WaitGroup)
+	fileNamesChan := make(chan string, 10)
+	wg.Add(1)
+	go func() {
+
+		if err := FindNativeMounts.Find("/", fileNamesChan, wg,
+				FindNativeMounts.NFS_SUPER_MAGIC, FindNativeMounts.PROC_SUPER_MAGIC,
+				FindNativeMounts.SYSFS_MAGIC, FindNativeMounts.TMPFS_MAGIC, 								FindNativeMounts.NFS_SUPER_MAGIC); err != nil {
+			panic(err)
+		}
+	}()
+	for ; ; {
+		info, ok := <-fileNamesChan
+		if ok == true {
+			fmt.Println(info, "is not on native disk")
+		} else {
+			fmt.Println("Finished")
+			break
+		}
+
+	}
+	wg.Wait()
+}
+```
+#### output:
+
+```
+/repo is not on native disk
+/proc is not on native disk
+/dev is not on native disk
+/sys is not on native disk
+/run is not on native disk
+Finished
+```
+
+#### Original mounts as per `df` :
+
+```
+Filesystem      Size  Used Avail Use% Mounted on
+udev            3.9G     0  3.9G   0% /dev
+tmpfs           789M   10M  780M   2% /run
+/dev/sda6       110G   95G  9.1G  92% /
+tmpfs           3.9G  201M  3.7G   6% /dev/shm
+tmpfs           5.0M  4.0K  5.0M   1% /run/lock
+tmpfs           3.9G     0  3.9G   0% /sys/fs/cgroup
+/dev/sda1       464M  355M   81M  82% /boot
+cgmfs           100K     0  100K   0% /run/cgmanager/fs
+tmpfs           789M   60K  789M   1% /run/user/1000
+localhost:/mnt  110G   95G  9.1G  92% /repo
+
 ```
